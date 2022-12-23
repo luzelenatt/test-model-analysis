@@ -36,12 +36,25 @@ def app():
     #mostrar los tweets extraídos
     st.subheader('Datos extraídos de Twitter: Fecha, Nombre de usuario y Tweet')
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])  
-    st.write(df)  
-    st.subheader('Tipos de Datos extraídos de Twitter: Fecha, Nombre de usuario y Tweet') 
-    st.write(df.dtypes)  
+    st.write(df) 
+     
     # Check Columns
     st.subheader('Columnas de la data')
+    st.write('Referencia de cada columna: Índice 0: Fecha, Índice 1: Nombre de usuario, Índice 2: Tweet')
     st.write(df.columns)   
+    
+    st.subheader('Gráfica de barras - Distribución de los tweets por usuario')     
+    # Source/ Value Count/Distribution of the Users
+    st.write(df['User'].unique())
+    # Plot the top value_counts
+    st.write('Mostramos los 25 primeros usuarios que hacen más tweets relacionados con el tema')   
+    st.write(df['User'].value_counts().nlargest(25))
+    # Plot the top value_counts
+    plt.pie(figsize=(20,10))
+    df['User'].value_counts().nlargest(30).plot(kind='bar')
+    plt.xticks(rotation=45)
+    st.pyplot()
+    
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
         pat2 = r'https?://[A-Za-z0-9./]+'  #links
