@@ -14,7 +14,7 @@ nltk.download("stopwords")
 def app():
     st.header('Análisis de sentimientos de tweets sobre Pedro Castillo')
     import snscrape.modules.twitter as sntwitter
-   # cantidad_tweets = st.number_input('Cantidad de tweets a evaluar: ',500,1000)
+    st.subheader('EXTRACCIÓN DE LA DATA')    
     query = st.text_input('Ingresar la busqueda para scrapear','pedro castillo (to:PedroCastilloTe) (@PedroCastilloTe) lang:es until:2022-12-16 since:2022-12-01')
     st.caption('Se recomienda acceder a la búsqueda avanzada de twitter (https://twitter.com/search-advanced?lang=es) y pegar la consulta generada')
     
@@ -32,12 +32,13 @@ def app():
             break
         else:
             tweets.append([tweet.date.date(), tweet.user.username, tweet.content])
-            
+    st.subheader('INFORMACIÓN DE LA DATA')        
     #mostrar los tweets extraídos
     st.subheader('Datos extraídos de Twitter: Fecha, Nombre de usuario y Tweet')
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])  
     st.write(df)  
-    
+    st.subheader('Tipos de Datos extraídos de Twitter: Fecha, Nombre de usuario y Tweet') 
+    st.write(df.dtypes)  
     # Check Columns
     st.subheader('Columnas de la data')
     st.write(df.columns)   
