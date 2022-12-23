@@ -26,8 +26,11 @@ def app():
             break
         else:
             tweets.append([tweet.date.date(), tweet.content]) 
-        
+            
+     #mostrar los tweets extraídos
+    st.subheader('Datos extraídos (sin preprocesamiento)')        
     df = pd.DataFrame(tweets, columns=['Date', 'Tweet'])
+    st.write(df) 
     
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
