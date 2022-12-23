@@ -19,7 +19,7 @@ def app():
     query = st.text_input('Ingresar la busqueda para scrapear','pedro castillo (to:PedroCastilloTe) (@PedroCastilloTe) lang:es until:2022-12-16 since:2022-12-01')
     st.caption('Se recomienda acceder a la búsqueda avanzada de twitter (https://twitter.com/search-advanced?lang=es) y pegar la consulta generada')
     
-    cantidad_tweets = st.number_input('Cantidad de tweets a evaluar:', 500, step=20)
+    cantidad_tweets = st.number_input('Cantidad de tweets a evaluar:', 50, step=20)
     tweet_data = None 
     df = None   
     # query = "(from:BarackObama) until:2022-01-01 since:2002-01-01"
