@@ -26,15 +26,20 @@ def app():
     limit = cantidad_tweets
     
     for tweet in sntwitter.TwitterSearchScraper(query).get_items():
-        if len(tweets)==limit:
+        
+        if len(tweets) == limit:
             break
         else:
-            tweets.append([tweet.date.date(), tweet.content]) 
+            tweets.append([tweet.date.date(), tweet.user.username, tweet.content])
             
-     #mostrar los tweets extraídos
-    st.subheader('Datos extraídos (sin preprocesamiento)')        
-    df = pd.DataFrame(tweets, columns=['Date', 'Tweet'])
-    st.write(df) 
+    #mostrar los tweets extraídos
+    st.subheader('Datos extraídos (sin preprocesamiento)')
+    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])  
+    st.write(df)  
+    
+    # Check Columns
+    st.write(df.columns)
+    
     
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
