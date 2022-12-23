@@ -45,15 +45,17 @@ def app():
     
     st.subheader('Gráfica de barras - Distribución de los tweets por usuario')     
     # Source/ Value Count/Distribution of the Users
+    st.write('Mostramos los usuarios únicos que hacen más tweets relacionados con el tema')   
     st.write(df['User'].unique())
     # Plot the top value_counts
     st.write('Mostramos los 25 primeros usuarios que hacen más tweets relacionados con el tema')   
     st.write(df['User'].value_counts().nlargest(25))
+    
     # Plot the top value_counts
-    plt.pie(figsize=(20,10))
+    fig = plt.figure(figsize=(20,10))
     df['User'].value_counts().nlargest(30).plot(kind='bar')
-    plt.xticks(rotation=45)
-    st.pyplot()
+    #plt.xticks(rotation=45)
+    st.pytplot (fig)
     
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
