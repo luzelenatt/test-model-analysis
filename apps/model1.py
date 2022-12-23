@@ -50,10 +50,10 @@ def app():
     #st.write(df['User'].unique())
     # Plot the top value_counts
     st.write('Mostramos los 25 primeros usuarios que hacen más tweets relacionados con el tema')   
-    df1 = df['User'].value_counts().nlargest(25)
+    df1 = px.df['User'].value_counts().nlargest(25)
     st.write(df1)
     # graficar en streamlit
-    fig = px.bar(df1, x='User', y='count', color='count', height=400)
+    fig = px.scatter(df1, x='User', y='count', color='count', height=400)
     st.plotly_chart(fig)
     
     def clean_text(text):  
