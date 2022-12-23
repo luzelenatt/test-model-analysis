@@ -1,0 +1,12 @@
+streamlit==1.15.2
+numpy==1.21.5
+pandas==1.4.2
+matplotlib==3.5.1
+statsmodels==0.12.2
+textblob==0.17.1
+wordcloud==1.8.2.2
+nltk==3.8
+scikit-learn
+plotly
+tweepy==3.8.0
+snscrape==0.4.3.20220106
