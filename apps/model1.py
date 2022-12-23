@@ -17,7 +17,7 @@ def app():
    # cantidad_tweets = st.number_input('Cantidad de tweets a evaluar: ',500,1000)
     
     query = st.text_input('Ingresar la busqueda para scrapear','(from:PedroCastilloTe) until:2022-12-22 since:2010-01-01')
-    limit = st.number_input('Cantidad de tweets a evaluar:', 500, step=20)
+    cantidad_tweets = st.number_input('Cantidad de tweets a evaluar:', 500, step=20)
     tweet_data = None 
     df = None   
     # query = "(from:BarackObama) until:2022-01-01 since:2002-01-01"
