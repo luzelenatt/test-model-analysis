@@ -5,6 +5,7 @@ from wordcloud import WordCloud, ImageColorGenerator
 from nltk.tokenize import WordPunctTokenizer
 import pandas as pd
 import numpy as np
+import plotly.express as px
 import re
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
