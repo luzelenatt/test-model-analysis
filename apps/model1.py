@@ -21,7 +21,7 @@ def app():
     tweet_data = None 
     df = None   
     # query = "(from:BarackObama) until:2022-01-01 since:2002-01-01"
-    query = "(from:PedroCastilloTe) until:2022-12-22 since:2010-01-01"
+    #query = "(from:PedroCastilloTe) until:2022-12-22 since:2010-01-01"
     tweets = []
     limit = cantidad_tweets
     
