@@ -34,14 +34,13 @@ def app():
             tweets.append([tweet.date.date(), tweet.user.username, tweet.content])
             
     #mostrar los tweets extraídos
-    st.subheader('Datos extraídos de Twitter')
+    st.subheader('Datos extraídos de Twitter: Fecha, Nombre de usuario y Tweet')
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])  
     st.write(df)  
     
     # Check Columns
-    st.write(df.columns)
-    
-    
+    st.subheader('Columnas de la data')
+    st.write(df.columns)   
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
         pat2 = r'https?://[A-Za-z0-9./]+'  #links
