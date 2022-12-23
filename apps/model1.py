@@ -15,7 +15,7 @@ def app():
     st.header('Análisis de sentimientos de tweets sobre Pedro Castillo')
     import snscrape.modules.twitter as sntwitter
    # cantidad_tweets = st.number_input('Cantidad de tweets a evaluar: ',500,1000)
-    query = st.text_input('Ingresar la busqueda para scrapear','(from:PedroCastilloTe) until:2022-12-22 since:2010-01-01')
+    query = st.text_input('Ingresar la busqueda para scrapear','pedro castillo (to:PedroCastilloTe) (@PedroCastilloTe) lang:es until:2022-12-16 since:2022-12-01')
     st.caption('Se recomienda acceder a la búsqueda avanzada de twitter (https://twitter.com/search-advanced?lang=es) y pegar la consulta generada')
     
     cantidad_tweets = st.number_input('Cantidad de tweets a evaluar:', 500, step=20)
