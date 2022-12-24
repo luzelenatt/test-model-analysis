@@ -73,12 +73,12 @@ def app():
     @st.cache
     def tweet_cleaner(text):
         tok = WordPunctTokenizer()
-        pat1 = r'@[A-Za-z0-9]+'
+        pat1 = r'@[^ ]+'
         pat2 = r'https?://[A-Za-z0-9./]+'
-        pat3 = r'pic.twitter.com/[A-Za-z0-9./]+'
-        #pat4 = r'\'s' 
-        #pat5 = r'\#\w+'
-        combined_pat = r'|'.join((pat1, pat2, pat3))
+        pat3 = r'\'s'
+        pat4 = r'\#\w+' 
+        pat5 = r'&amp'
+        combined_pat = r'|'.join((pat1, pat2, pat3, pat4, pat5))
         soup = BeautifulSoup(text, 'lxml')
         souped = soup.get_text()
         stripped = re.sub(combined_pat, '', souped)
