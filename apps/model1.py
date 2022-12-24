@@ -94,7 +94,7 @@ def app():
         return (" ".join(words)).strip()
    
     st.subheader("Eliminar enlaces, menciones, hastags y espacios de los tweets")
-    removing_data = st.text('Removing caracteres innecesarios...')
+    removing_data = st.text('Eliminando caracteres innecesarios...')
     
     df['Tweet'] = df['Tweet'].apply(lambda text: tweet_cleaner(text))
     st.table(df['Tweet'].head(25))
@@ -123,7 +123,27 @@ def app():
     labeling_data = st.text('Resultados de la clasificación de sentimientos')
     df["sentiment"] = df["Tweet"].apply(lambda x: sentimenLabeling(x))
     labeling_data.text('Clasificación de sentimientos exitosa!')
-    st.table(df['Tweet'].head(25))
+    df['Tweet'].head(25)
     st.write(df)
+    
+    st.subheader('Gráfica de barras en donde el eje x son los nombres usuarios de Twitter y el eje Y es la cantidad o frecuencia de tweets')
+    df3 = df['sentiment'].value_counts()
+    fig3 = px.bar(df3,height=800)
+    st.plotly_chart(fig3)
+    
+    st.subheader('Gráfica circular (%) que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
+    labels = 'Positivo', 'Neutral', 'Negativo'
+    pos = df[df.sentiment == 1].shape[0]
+    net = df[df.sentiment == 0].shape[0]
+    neg = df[df.sentiment == -1].shape[0]
+    
+    sizes = [pos, net, neg]
+    colors = ['lightskyblue', 'purple', 'pink']
+    explode = (0.1, 0, 0)
+    # Plot
+    plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
+    autopct='%1.1f%%', startangle=140)
+    plt.axis('equal')
+    st.pyplot()
     
     
