@@ -143,6 +143,7 @@ def app():
     # Plot
     plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
     autopct='%1.1f%%', startangle=140)
+    st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
     
     
