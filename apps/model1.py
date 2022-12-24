@@ -141,8 +141,8 @@ def app():
     colors = ['lightskyblue', 'purple', 'pink']
     explode = (0.1, 0, 0)
     # Plot
-    fig5 = plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
+    plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
     autopct='%1.1f%%', startangle=140)
-    st.pyplot(fig5)
+    st.pyplot()
     
     
