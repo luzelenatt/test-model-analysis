@@ -1,5 +1,4 @@
 import streamlit as st
-import twint
 import seaborn as sns
 from sklearn.decomposition import PCA
 import pandas as pd
