@@ -9,7 +9,7 @@ import plotly.express as px
 import re
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
-import neattext.functions as nfx
+import nfx
 import nltk
 from nltk.corpus import stopwords
 nltk.download("stopwords")
