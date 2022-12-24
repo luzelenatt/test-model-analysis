@@ -120,9 +120,16 @@ def app():
     df['Tweet'].head(25)
     st.write(df)
     
+    st.subheader('Distribución de los sentimientos de tipo positivo, negativo y neutro')
     df4 = df['sentiment'].value_counts()
     st.write(df4)
-    
+    st.subheader('Gráfica de barras que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
+    df5 = df['sentiment'].value_counts().plot(kind='bar')
+    st.write(df5)
+    # graficar en streamlit
+    st.write('Obtenemos la gráfica de barras en donde el eje x son los nombres usuarios de Twitter y el eje Y es la cantidad o frecuencia de tweets')
+    fig5 = px.bar(df5,height=800)
+    st.plotly_chart(fig5)
     positive_tweet = df[df['sentiment'] == 'Positive']
     pos=positive_tweet['Tweet']
     
@@ -132,25 +139,10 @@ def app():
     negative_tweet = df[df['sentiment'] == 'Negative']
     neg=negative_tweet['Tweet']
     
-    st.write('Cantidad de tweets positivos: ', positive_tweet.shape[0]/ df.shape[0] * 100, 5)
-    st.write('Cantidad de tweets neutrales: ', neutral_tweet.shape[0]/ df.shape[0] * 100, 5)
-    st.write('Cantidad de tweets negativos: ', negative_tweet.shape[0]/ df.shape[0] * 100, 5)
-    
-    st.subheader('Gráfica circular (%) que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
-    labels = 'Positivo', 'Neutral', 'Negativo'
-    positive = df[df.sentiment == 1].shape[0]
-    neutral = df[df.sentiment == 0].shape[0]
-    negative = df[df.sentiment == -1].shape[0]
-    
-    sizes = [positive, neutral, negative]
-    colors = ['lightcoral', 'gold', 'lightskyblue']
-    explode = (0.1, 0, 0)
-    # Plot
-    plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
-    autopct='%1.1f%%', startangle=140)
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    st.pyplot()
-    
+    #st.write('Cantidad de tweets positivos: ', positive_tweet.shape[0]/ df.shape[0] * 100, 5)
+    #st.write('Cantidad de tweets neutrales: ', neutral_tweet.shape[0]/ df.shape[0] * 100, 5)
+    #st.write('Cantidad de tweets negativos: ', negative_tweet.shape[0]/ df.shape[0] * 100, 5)
+      
     st.subheader('Gráfica de Análisis de Sentimientos Subjetividad - Polaridad')
 
     #grafico de sentimiento y subjetividad con plotly
