@@ -66,6 +66,7 @@ def app():
     df1 = df['User'].value_counts().nlargest(25)
     st.write(df1)
     # graficar en streamlit
+    st.write('Obtenemos la gráfica de barras en donde el eje x son los nombres usuarios de Twitter y el eje Y es la cantidad o frecuencia de tweets')
     fig = px.bar(df1,height=800)
     st.plotly_chart(fig)
     
@@ -77,7 +78,9 @@ def app():
         pat1 = r'@[A-Za-z0-9]+'
         pat2 = r'https?://[A-Za-z0-9./]+'
         pat3 = r'pic.twitter.com/[A-Za-z0-9./]+'
-        combined_pat = r'|'.join((pat1, pat2, pat3))
+        pat4 = r'\'s' 
+        pat5 = r'\#\w+'
+        combined_pat = r'|'.join((pat1, pat2, pat3, pat4, pat5))
         soup = BeautifulSoup(text, 'lxml')
         souped = soup.get_text()
         stripped = re.sub(combined_pat, '', souped)
@@ -90,30 +93,37 @@ def app():
         words = tok.tokenize(lower_case)
         return (" ".join(words)).strip()
    
-    st.subheader("Remover caracteres")
+    st.subheader("Eliminar enlaces, menciones, hastags y espacios de los tweets")
+    removing_data = st.text('Removing caracteres innecesarios...')
+    
     df['Tweet'] = df['Tweet'].apply(lambda text: tweet_cleaner(text))
-    st.table(df['Tweet'].head(5))
+    st.table(df['Tweet'].head(25))
     st.write(df)
     
-    
-    #hacemos una funcion para limpiar los tweets   
-    def clean_text(text):
-        pat1 = r'@[^ ]+'                   #signs
-        pat2 = r'https?://[A-Za-z0-9./]+'  #links
-        pat3 = r'\'s'                      #floating s's
-        pat4 = r'\#\w+'                     # hashtags
-        pat5 = r'&amp '
-        #pat6 = r'[^A-Za-z\s]'         #remove non-alphabet
-        combined_pat = r'|'.join((pat1, pat2,pat3,pat4,pat5))
-        text = re.sub(combined_pat,"",text).lower()
-        return text.strip()
-    # creamos una nueva columna para los tweets limpios
-    df['Tweet']=df['Tweet'].apply(clean_text)
-    st.write('Removemos las menciones, enlaces, numeros, hashtags y caracteres especiales')  
-    st.write(df)
-    
-    st.subheader('ANÁLISIS DE SENTIMIENTOS')      
-    #crear una funcion para obtener la polaridad y subjetividad
+    st.subheader('ANÁLISIS DE SENTIMIENTO')
+    @st.cache
+    def sentimenLabeling(text):
+        analyticts  = TextBlob(text)
+        an = analyticts
+            
+        try:
+            if an.detect_language() != 'es':
+                an = analyticts.translate(from_lang='id', to='es')
+                print(an)
+        except:
+            print("OK")
+            
+        if an.sentiment.polarity > 0:
+            return 1
+        elif an.sentiment.polarity == 0:
+            return 0
+        else:
+            return -1
 
+    labeling_data = st.text('Resultados de la clasificación de sentimientos')
+    df["sentiment"] = df["Tweet"].apply(lambda x: sentimenLabeling(x))
+    labeling_data.text('Clasificación de sentimientos exitosa!')
+    st.table(df['Tweet'].head(25))
+    st.write(df)
     
     
