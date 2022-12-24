@@ -1,18 +1,10 @@
 import streamlit as st
-#import tweepy
-#from textblob import TextBlob
-#from wordcloud import WordCloud, ImageColorGenerator
-#from nltk.tokenize import WordPunctTokenizer
 import pandas as pd
 import numpy as np
 import plotly.express as px
 import re
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
-import nfx
-import nltk
-from nltk.corpus import stopwords
-nltk.download("stopwords")
 def app():
     st.header('Análisis de sentimientos de tweets sobre Pedro Castillo')
     import snscrape.modules.twitter as sntwitter
@@ -58,59 +50,36 @@ def app():
     st.plotly_chart(fig)
     
     st.subheader('Preprocesamiento de texto')   
-    def clean_text(text):  
-        pat1 = r'@[^ ]+'                   #signs
-        pat2 = r'https?://[A-Za-z0-9./]+'  #links
-        pat3 = r'\'s'                      #floating s's
-        pat4 = r'\#\w+'                     # hashtags
-        pat5 = r'&amp '
-        #pat6 = r'[^A-Za-z\s]'         #remove non-alphabet
-        combined_pat = r'|'.join((pat1, pat2,pat3,pat4,pat5))
-        text = re.sub(combined_pat,"",text).lower()
-        return text.strip()
-    #limpiar tweets
-    df['Tweet']=df['Tweet'].apply(clean_text)
+    #hacemos una funcion para limpiar los tweets
+    def clean_text_round1(text):
+        '''Poner el texto en minúsculas, elimine el texto entre corchetes, elimine la puntuación y elimine las palabras que contienen números.'''
+        text = text.lower()
+        text = re.sub('\[.*?\]', '', text)
+        text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+        text = re.sub('\w*\d\w*', '', text)
+        return text
+    # creamos una nueva columna para los tweets limpios
+    round1 = lambda x: clean_text_round1(x)
+    df['clean_tweet'] = df['Tweet'].apply(round1)
+    # Ahora aplicaremos la siguiente técnica: Eliminar algunas puntuaciones, textos o palabras que no tengan sentido
+    def clean_text_round2(text):
+        '''Suprimir algunos signos de puntuación adicionales y texto sin sentido.'''
+        text = re.sub('[‘’“”…]', '', text)
+        text = re.sub('\n', '', text)
+        return text
 
-    #mostrar los tweets limpiados
-    
-    st.subheader('Datos limpiados (sin menciones, links, hashtags o retweets)') 
-    
-    dir(nfx)
-    # Cleaning Text: Multiple WhiteSpaces
-    df['clean_tweet'] = df['Tweet'].apply(nfx.remove_multiple_spaces)
-    # Cleaning Text : Remove urls
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_urls)
-    # Cleaning Text : remove_userhandles
-    df['clean_tweet'] = df['clean_tweet'].apply(lambda x: nfx.remove_userhandles(x))
-    # Cleaning Text: Multiple WhiteSpaces
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_multiple_spaces)
-    # Cleaning Text : remove_urls
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_urls)
-    # Cleaning Text: remove_punctuations
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_punctuations)
-    # Cleaning Text: remove_special_characters
-    #df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_special_characters)
-    # Cleaning Text: remove_shortwords
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_shortwords)
-    # Cleaning Text: remove_emojis
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_emojis)
-    # Cleaning Text: remove_punctuations
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_punctuations)
-    # Cleaning Text: remove_punctuations
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_terms_in_bracket)
-    # Cleaning Text: remove_shortwords
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_shortwords)
-    # Cleaning Text: remove_stopwords
-    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_stopwords)
-    
-    stopwords = set(stopwords.words('spanish', 'english')) 
-    stopwords.update(['la','lo','los','las','le','les','un','unos','una','unas','el','tu','mi','si','te','se','de','mas','al','del','él','tú','mí','sí','té','sé','dé','más',
-                    'este','esta','estos','estas','ese','esa','esos','esos','esas','aquel','aquella','aquellos','aquellas','mío','mía','nuestro','nuestra','tuyo','tuya','su','suyo','suya'
-                    'mis','míos','mías','nuestros','nuestras','vuestros','vuestras','tuyos','tuyas','sus','suyos','suyas','algún','alguna','algunos','algunas','varios','mucho','muchas','poco','poca'
-                    'pocos','pocas','demasiado','demasiados','demasiadas','a','e','i','o','u','ante','bajo','cabe','con','contra','desde','durante','en','entre','hacia','hasta','mediante','para','por',
-                    'según','sin','so','sobre','tras','versus','vía'
-                    'pero','como','esta','porque','y','nos'])
-    st.write(df) 
+    round2 = lambda x: clean_text_round2(x)
+    df['clean_tweet'] = df['clean_tweet'].apply(round2)
+    #funcion para eliminar todos los caracteres que no sean letras en ingles
+    def remove_non_ascii_1(text):
+        '''Remove non-ASCII characters from list of tokenized words'''
+        return re.sub(r'[^\x00-\x7f]',r'', text)
+    #aplicamos la funcion a la columna de tweets
+    df['clean_tweet'] = pd.DataFrame(df.clean_tweet.apply(remove_non_ascii_1))
+    #las filas que no tienen tweets se eliminan
+    df = df[df['clean_tweet'] != '']
+    st.subheader('Tweets extraidos')
+    st.write(df)
     
     #crear una funcion para obtener la subjetividad
     def getSubjectivity(text):

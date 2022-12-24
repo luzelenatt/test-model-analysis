@@ -10,4 +10,4 @@ scikit-learn
 #tweepy==3.8.0
 snscrape==0.4.3.20220106
 plotly == 5.3.1
-nfx==0.0.3
+
