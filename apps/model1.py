@@ -82,7 +82,7 @@ def app():
         text = re.sub(combined_pat,"",text).lower()
         return text.strip()
     #limpiar tweets
-    df['Tweet']=df['Tweet'].apply(clean_text)
+    df['Tweet']=df['Tweet'].apply(tweet_cleaner)
     st.write(df)
         # Cleaning Text : remove_userhandles
     import neattext.functions as nfx
