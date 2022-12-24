@@ -126,6 +126,7 @@ def app():
     df['Tweet'].head(25)
     st.write(df)
     
+    
     st.subheader('Gráfica circular (%) que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
     labels = 'Positivo', 'Neutral', 'Negativo'
     positive = df[df.sentiment == 1].shape[0]
@@ -133,7 +134,7 @@ def app():
     negative = df[df.sentiment == -1].shape[0]
     
     sizes = [positive, neutral, negative]
-    colors = ['lightcoral', 'yellow', 'lightskyblue']
+    colors = ['lightcoral', 'gold', 'lightskyblue']
     explode = (0.1, 0, 0)
     # Plot
     plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
@@ -141,33 +142,24 @@ def app():
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
     
-    
-    st.subheader('Nube de texto de tweets')
+    st.subheader('Nube de texto de todos los tweets')
+    # Join the different processed titles together.
+    long_string = ','.join(list(df['clean_tweet'].values))
     # Create a WordCloud object
-    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')   
+    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')
     # Generate a word cloud
-    wordcloud.generate(long_string)   
-    
-    #hacer una nube de palabras con los tweets positivos
-    #seleccionar los tweets positivos
-    df_positive = df[df['sentiment'] > 0]
-    # Join the different processed titles together.
-    long_string = ','.join(list(df_positive['clean_tweet'].values))
-    st.subheader('Nube de texto de tweets positivos')
-    st.image(wordcloud.to_array())     
-    
-    #seleccionar los tweets neutros
-    df_neutral = df[df['sentiment'] == 0]
-    # Join the different processed titles together.
-    long_string = ','.join(list(df_neutral['clean_tweet'].values))
-    st.subheader('Nube de texto de tweets neutros')
-    st.image(wordcloud.to_array())
-    
-    #seleccionar los tweets positivos
-    df_negative = df[df['sentiment'] < 0]
-    # Join the different processed titles together.
-    long_string = ','.join(list(df_negative['clean_tweet'].values))
-    st.subheader('Nube de texto de tweets negativos')  
+    wordcloud.generate(long_string)
+    # Visualize the word cloud in streamlit
     st.image(wordcloud.to_array())
 
-    
+    #mostrar un grafico de barras con las palabras mas comunes
+    #modo oscuro
+    sns.set_style('darkgrid')
+    # Crear un dataframe de las palabras más comunes
+    data_words = pd.DataFrame(wordcloud.words_.items(), columns=['word', 'count'])
+    #seleccionar las 10 palabras mas comunes
+    data_words = data_words.iloc[:10, :]
+    # Visualizar los palabras más comunes con plotly.express
+    st.subheader('Palabras más comunes')
+    fig = px.bar(data_words, x='word', y='count', color='count', height=800)
+    st.plotly_chart(fig)
