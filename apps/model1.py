@@ -169,7 +169,7 @@ def app():
     with st.spinner('Cargando grafica de sentimiento'):
         #grafico de sentimiento y subjetividad con plotly
         st.subheader('Grafico de sentimiento y subjetividad')
-        fig = px.scatter(df_tweets, x="polarity", y="subjectivity", color="sentiment",
+        fig = px.scatter(df, x="polarity", y="subjectivity", color="sentiment",
                             hover_data=['tweet'])
         st.write("Eje horizontal: Mientras más cercano a 1, más positivo es el comentario Mientras más cercano a -1, más negativo es el sentimiento.")
         st.write("Eje vertical: Mientras más cercano a 1, más subjetivo es el comentario Mientras más cercano a 0, más objetivo es el comentario.")
@@ -178,9 +178,9 @@ def app():
         #hacer un grafico circular de los sentimientos positivos y negativos con plotly
         # si el sentimiento es mayor a 0, es positivo, si es menor a 0 es negativo 
         #contar los tweets positivos y negativos
-        df_tweets['label'] = df_tweets['polarity'].apply(lambda x: 'Positivo' if x > 0 else 'Negativo')
+        df['label'] = df['polarity'].apply(lambda x: 'Positivo' if x > 0 else 'Negativo')
         #crear un dataframe con los sentimientos
-        df_sent = df_tweets['label'].value_counts().reset_index()
+        df_sent = df['label'].value_counts().reset_index()
         df_sent.columns = ['sentimiento', 'total']
         #grafico circular
         st.subheader('Contador de comentarios positivos y negativos')
@@ -191,9 +191,9 @@ def app():
     with st.spinner('Analizando temas de los tweets'):
         # crear un diccionario de palabras para el modelo
         cv = CountVectorizer(stop_words='spanish')
-        data_cv = cv.fit_transform(df_tweets.clean_tweet)
+        data_cv = cv.fit_transform(df.Tweet)
         data_stop = pd.DataFrame(data_cv.toarray(), columns=cv.get_feature_names())
-        data_stop.index = df_tweets.index
+        data_stop.index = df.index
         #crear el modelo de LDA
         # Convertir una matriz dispersa de conteos en un corpus gensim
         corpus = matutils.Sparse2Corpus(scipy.sparse.csr_matrix(data_stop.transpose()))
