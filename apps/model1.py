@@ -138,7 +138,7 @@ def app():
     negative = df[df.sentiment == -1].shape[0]
     
     sizes = [positive, neutral, negative]
-    colors = ['lightskyblue', 'purple', 'pink']
+    colors = ['lightcoral', 'yellow', 'lightskyblue']
     explode = (0.1, 0, 0)
     # Plot
     plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
@@ -146,4 +146,33 @@ def app():
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
     
+    
+    st.subheader('Nube de texto de tweets')
+    # Create a WordCloud object
+    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')   
+    # Generate a word cloud
+    wordcloud.generate(long_string)   
+    
+    #hacer una nube de palabras con los tweets positivos
+    #seleccionar los tweets positivos
+    df_positive = df[df['sentiment'] > 0]
+    # Join the different processed titles together.
+    long_string = ','.join(list(df_positive['clean_tweet'].values))
+    st.subheader('Nube de texto de tweets positivos')
+    st.image(wordcloud.to_array())     
+    
+    #seleccionar los tweets neutros
+    df_neutral = df[df['sentiment'] == 0]
+    # Join the different processed titles together.
+    long_string = ','.join(list(df_neutral['clean_tweet'].values))
+    st.subheader('Nube de texto de tweets neutros')
+    st.image(wordcloud.to_array())
+    
+    #seleccionar los tweets positivos
+    df_negative = df[df['sentiment'] < 0]
+    # Join the different processed titles together.
+    long_string = ','.join(list(df_negative['clean_tweet'].values))
+    st.subheader('Nube de texto de tweets negativos')  
+    st.image(wordcloud.to_array())
+
     
