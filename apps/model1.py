@@ -141,37 +141,32 @@ def app():
     st.pyplot()
     
     st.subheader('Nube de texto de todos los tweets')
-    # Join the different processed titles together.
-    long_string = ','.join(list(df['Tweet'].values))
-    # Create a WordCloud object
-    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')
-    # Generate a word cloud
-    wordcloud.generate(long_string)
-    # Visualize the word cloud in streamlit
-    st.image(wordcloud.to_array())
-    
-    #hacer una nube de palabras con los tweets negativos
-    #seleccionar los tweets negativos
-    df_neg = df[df['sentiment'] < 0]
-    # Join the different processed titles together.
-    long_string = ','.join(list(df_neg['Tweet'].values))
-    # Create a WordCloud object
-    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')
-    # Generate a word cloud
-    wordcloud.generate(long_string)
-    # Visualize the word cloud in streamlit
-    st.subheader('Nube de palabras de tweets negativos')
-    st.image(wordcloud.to_array())
-    
+    def showWordCloud (df,sentiment, stopwords):
+        tweets = df[df.sentiment == sentiment]
+        string = []
+        for t in tweets.tweet:
+            string.append(t)
+        string = pd.Series(string).str.cat(sep=' ')
+
+        wordcloud = WordCloud(stopwords=stopwords, background_color="white").generate(string)
+        plt.figure()
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
         
-    #mostrar un grafico de barras con las palabras mas comunes
-    #modo oscuro
-    sns.set_style('darkgrid')
-    # Crear un dataframe de las palabras más comunes
-    data_words = pd.DataFrame(wordcloud.words_.items(), columns=['word', 'count'])
-    #seleccionar las 10 palabras mas comunes
-    data_words = data_words.iloc[:20, :]
-    # Visualizar los palabras más comunes con plotly.express
-    st.subheader('Palabras más comunes')
-    fig = px.bar(data_words, x='word', y='count', color='count', height=1000)
-    st.plotly_chart(fig)
+    stopwords = set(stopwords.words('spanish', 'english')) 
+
+    st.subheader("WordCloud Positivo Tweet")
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    showWordCloud(df, 1, stopword)
+
+    st.subheader("WordCloud Neutral Tweet")
+        
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    showWordCloud(df, 0, stopword)
+
+    st.subheader("WordCloud Negative Tweet")
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    showWordCloud(df, -1, stopword)
+    
