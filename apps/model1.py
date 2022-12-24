@@ -127,6 +127,14 @@ def app():
     #selecciona las columnas que nos interesan
     st.write(df[['Tweet', 'polarity', 'subjectivity']])
     
+    st.subheader('Grafico de Dispersión: Polaridad y Subjetividad de sentimientos')
+    with st.spinner('Cargando grafica de sentimiento'):
+        #grafico de sentimiento y subjetividad con plotly
+        fig = px.scatter(df, x="polarity", y="subjectivity", hover_data=['Tweet'])
+        st.write("Eje horizontal Polaridad: -1 <-- Negativa --------- 0 Neutral ------------ Positiva --> 1")
+        st.write("Eje verticalSubjetividad: 1 <-- Hechos --------------------- Opiniones --> 0")
+        st.plotly_chart(fig)
+    
     #hacer una nube de palabras con los tweets positivos
     #seleccionar los tweets positivos
     df_pos = df[df['polarity'] > 0]
@@ -166,11 +174,3 @@ def app():
     st.subheader('Nube de palabras de tweets neutros')
     st.image(wordcloud.to_array())
 
-    st.subheader('Grafico de Dispersión: Polaridad y Subjetividad de sentimientos')
-    with st.spinner('Cargando grafica de sentimiento'):
-        #grafico de sentimiento y subjetividad con plotly
-        fig = px.scatter(df, x="polarity", y="subjectivity", hover_data=['Tweet'])
-        st.write("Eje horizontal Polaridad: -1 <-- Negativa --------- 0 Neutral ------------ Positiva --> 1")
-        st.write("Eje verticalSubjetividad: 1 <-- Hechos --------------------- Opiniones --> 0")
-        st.plotly_chart(fig)
-    
