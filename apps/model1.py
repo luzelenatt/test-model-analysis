@@ -53,7 +53,7 @@ def app():
     df1 = df['User'].value_counts().nlargest(25)
     st.write(df1)
     # graficar en streamlit
-    fig = px.scatter(df1, x='User', y='count', color='count', height=400)
+    fig = px.scatter(df1, x='User', height=400)
     st.plotly_chart(fig)
     
     def clean_text(text):  
