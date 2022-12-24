@@ -133,11 +133,11 @@ def app():
     
     st.subheader('Gráfica circular (%) que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
     labels = 'Positivo', 'Neutral', 'Negativo'
-    pos = df[df.sentiment == 1].shape[0]
-    net = df[df.sentiment == 0].shape[0]
-    neg = df[df.sentiment == -1].shape[0]
+    positive = df[df.sentiment == 1].shape[0]
+    neutral = df[df.sentiment == 0].shape[0]
+    negative = df[df.sentiment == -1].shape[0]
     
-    sizes = [pos, net, neg]
+    sizes = [positive, neutral, negative]
     colors = ['lightskyblue', 'purple', 'pink']
     explode = (0.1, 0, 0)
     # Plot
