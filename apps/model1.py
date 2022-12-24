@@ -114,7 +114,7 @@ def app():
     #mostrar el dataframe con los tweets y sus sentimientos
     st.subheader('Resultado de twetts con sentimiento (polaridad y subjetividad')
     #selecciona las columnas que nos interesan
-    st.write(df_tweets[['tweet', 'polarity', 'subjectivity']])
+    st.write(df[['Tweet', 'polarity', 'subjectivity']])
     
     #hacer una nube de palabras con los tweets positivos
     #seleccionar los tweets positivos
