@@ -79,24 +79,8 @@ def app():
         return text.strip()
     # creamos una nueva columna para los tweets limpios
     df['Tweet']=df['Tweet'].apply(clean_text)
-    # Ahora aplicaremos la siguiente técnica: Eliminar algunas puntuaciones, textos o palabras que no tengan sentido
-    def clean_text_round2(text):
-        '''Suprimir algunos signos de puntuación adicionales y texto sin sentido.'''
-        text = re.sub('[‘’“”…]', '', text)
-        text = re.sub('\n', '', text)
-        return text
-
-    round2 = lambda x: clean_text_round2(x)
-    df['clean_tweet'] = df['clean_tweet'].apply(round2)
-    #funcion para eliminar todos los caracteres que no sean letras en ingles
-    def remove_non_ascii_1(text):
-        '''Remove non-ASCII characters from list of tokenized words'''
-        return re.sub(r'[^\x00-\x7f]',r'', text)
-    #aplicamos la funcion a la columna de tweets
-    df['clean_tweet'] = pd.DataFrame(df.clean_tweet.apply(remove_non_ascii_1))
-    #las filas que no tienen tweets se eliminan
-    df = df[df['clean_tweet'] != '']
-    st.subheader('Tweets extraidos')
+    
+ 
     st.write(df)
     
     #crear una funcion para obtener la subjetividad
