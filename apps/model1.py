@@ -5,7 +5,7 @@ import streamlit as st
 #from nltk.tokenize import WordPunctTokenizer
 import pandas as pd
 import numpy as np
-#import plotly.express as px
+import plotly.express as px
 import re
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
@@ -53,10 +53,9 @@ def app():
     df1 = df['User'].value_counts().nlargest(25)
     st.write(df1)
     # graficar en streamlit
+    fig = px.bar(df1,height=400)
+    st.plotly_chart(fig)
     
-    fig, ax = plt.subplots()
-    ax.hist(df1,height=400)
-    st.pyplot(fig)
     
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
