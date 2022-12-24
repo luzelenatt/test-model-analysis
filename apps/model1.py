@@ -9,9 +9,10 @@ import plotly.express as px
 import re
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
-#import nltk
-#from nltk.corpus import stopwords
-#nltk.download("stopwords")
+import neattext.functions as nfx
+import nltk
+from nltk.corpus import stopwords
+nltk.download("stopwords")
 def app():
     st.header('Análisis de sentimientos de tweets sobre Pedro Castillo')
     import snscrape.modules.twitter as sntwitter
@@ -53,10 +54,10 @@ def app():
     df1 = df['User'].value_counts().nlargest(25)
     st.write(df1)
     # graficar en streamlit
-    fig = px.bar(df1,height=400)
+    fig = px.bar(df1,height=800)
     st.plotly_chart(fig)
     
-    
+    st.subheader('Preprocesamiento de texto')   
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
         pat2 = r'https?://[A-Za-z0-9./]+'  #links
@@ -71,7 +72,44 @@ def app():
     df['Tweet']=df['Tweet'].apply(clean_text)
 
     #mostrar los tweets limpiados
+    
     st.subheader('Datos limpiados (sin menciones, links, hashtags o retweets)') 
+    
+    dir(nfx)
+    # Cleaning Text: Multiple WhiteSpaces
+    df['clean_tweet'] = df['Tweet'].apply(nfx.remove_multiple_spaces)
+    # Cleaning Text : Remove urls
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_urls)
+    # Cleaning Text : remove_userhandles
+    df['clean_tweet'] = df['clean_tweet'].apply(lambda x: nfx.remove_userhandles(x))
+    # Cleaning Text: Multiple WhiteSpaces
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_multiple_spaces)
+    # Cleaning Text : remove_urls
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_urls)
+    # Cleaning Text: remove_punctuations
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_punctuations)
+    # Cleaning Text: remove_special_characters
+    #df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_special_characters)
+    # Cleaning Text: remove_shortwords
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_shortwords)
+    # Cleaning Text: remove_emojis
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_emojis)
+    # Cleaning Text: remove_punctuations
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_punctuations)
+    # Cleaning Text: remove_punctuations
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_terms_in_bracket)
+    # Cleaning Text: remove_shortwords
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_shortwords)
+    # Cleaning Text: remove_stopwords
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_stopwords)
+    
+    stopwords = set(stopwords.words('spanish', 'english')) 
+    stopwords.update(['la','lo','los','las','le','les','un','unos','una','unas','el','tu','mi','si','te','se','de','mas','al','del','él','tú','mí','sí','té','sé','dé','más',
+                    'este','esta','estos','estas','ese','esa','esos','esos','esas','aquel','aquella','aquellos','aquellas','mío','mía','nuestro','nuestra','tuyo','tuya','su','suyo','suya'
+                    'mis','míos','mías','nuestros','nuestras','vuestros','vuestras','tuyos','tuyas','sus','suyos','suyas','algún','alguna','algunos','algunas','varios','mucho','muchas','poco','poca'
+                    'pocos','pocas','demasiado','demasiados','demasiadas','a','e','i','o','u','ante','bajo','cabe','con','contra','desde','durante','en','entre','hacia','hasta','mediante','para','por',
+                    'según','sin','so','sobre','tras','versus','vía'
+                    'pero','como','esta','porque','y','nos'])
     st.write(df) 
     
     #crear una funcion para obtener la subjetividad

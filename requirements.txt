@@ -5,8 +5,9 @@ matplotlib==3.6.2
 #statsmodels==0.12.2
 #textblob==0.17.1
 #wordcloud==1.8.2.2
-#nltk==3.8
+nltk==3.8
 scikit-learn
 #tweepy==3.8.0
 snscrape==0.4.3.20220106
 plotly == 5.3.1
+nfx==0.0.3
