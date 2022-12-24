@@ -100,30 +100,36 @@ def app():
     
     st.subheader('ANÁLISIS DE SENTIMIENTO')
     @st.cache
-    def sentimenLabeling(text):
-        analyticts  = TextBlob(text)
-        an = analyticts
-            
-        try:
-            if an.detect_language() != 'es':
-                an = analyticts.translate(from_lang='id', to='es')
-                print(an)
-        except:
-            print("OK")
-            
-        if an.sentiment.polarity > 0:
-            return 1
-        elif an.sentiment.polarity == 0:
-            return 0
+    def get_sentiment(text):
+        blob = TextBlob(text)
+        sentiment_polarity = blob.sentiment.polarity
+        sentiment_subjectivity = blob.sentiment.subjectivity
+        if sentiment_polarity > 0:
+            sentiment_label = 'Positive'
+        elif sentiment_polarity < 0:
+            sentiment_label = 'Negative'
         else:
-            return -1
+            sentiment_label = 'Neutral'
+        result = {'polarity':sentiment_polarity,
+                'subjectivity':sentiment_subjectivity,
+                'sentiment':sentiment_label}
+        return result
 
-    labeling_data = st.text('Resultados de la clasificación de sentimientos')
-    df["sentiment"] = df["Tweet"].apply(lambda x: sentimenLabeling(x))
-    labeling_data.text('Clasificación de sentimientos exitosa!')
+    st.text('Resultados de la clasificación de sentimientos')
+    df["sentiment"] = df["Tweet"].apply(get_sentiment)
     df['Tweet'].head(25)
     st.write(df)
     
+    df4 = df['sentiment'].value_counts()
+    st.write(df4)
+    
+    positive_tweet = df[df['sentiment'] == 'Positive']['Tweet']
+    neutral_tweet = df[df['sentiment'] == 'Neutral']['Tweet']
+    negative_tweet = df[df['sentiment'] == 'Negative']['Tweet']
+    
+    st.write('Cantidad de tweets positivos: ', positive_tweet.shape[0]/ df.shape[0] * 100, 1)
+    st.write('Cantidad de tweets neutrales: ', neutral_tweet.shape[0]/ df.shape[0] * 100, 1)
+    st.write('Cantidad de tweets negativos: ', negative_tweet.shape[0]/ df.shape[0] * 100, 1)
     
     st.subheader('Gráfica circular (%) que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
     labels = 'Positivo', 'Neutral', 'Negativo'
@@ -139,34 +145,4 @@ def app():
     autopct='%1.1f%%', startangle=140)
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
-    
-    st.subheader('Nube de texto de todos los tweets')
-    def showWordCloud (df,sentiment, stopwords):
-        tweets = df[df.sentiment == sentiment]
-        string = []
-        for t in tweets.tweet:
-            string.append(t)
-        string = pd.Series(string).str.cat(sep=' ')
-
-        wordcloud = WordCloud(stopwords=stopwords, background_color="white").generate(string)
-        plt.figure()
-        plt.imshow(wordcloud, interpolation="bilinear")
-        plt.axis("off")
-        st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot()
-        
-    stopword = set(stopwords.words('spanish', 'english')) 
-
-    st.subheader("WordCloud Positivo Tweet")
-    asyncio.set_event_loop(asyncio.new_event_loop())
-    showWordCloud(df, 1, stopword)
-
-    st.subheader("WordCloud Neutral Tweet")
-        
-    asyncio.set_event_loop(asyncio.new_event_loop())
-    showWordCloud(df, 0, stopword)
-
-    st.subheader("WordCloud Negative Tweet")
-    asyncio.set_event_loop(asyncio.new_event_loop())
-    showWordCloud(df, -1, stopword)
     
