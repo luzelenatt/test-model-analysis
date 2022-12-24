@@ -127,9 +127,9 @@ def app():
     neutral_tweet = df[df['sentiment'] == 'Neutral']['Tweet']
     negative_tweet = df[df['sentiment'] == 'Negative']['Tweet']
     
-    st.write('Cantidad de tweets positivos: ', positive_tweet.shape[0]/ df.shape[0] * 100, 1)
-    st.write('Cantidad de tweets neutrales: ', neutral_tweet.shape[0]/ df.shape[0] * 100, 1)
-    st.write('Cantidad de tweets negativos: ', negative_tweet.shape[0]/ df.shape[0] * 100, 1)
+    st.write('Cantidad de tweets positivos: ', positive_tweet.shape[0]/ df.shape[0] * 100, 5)
+    st.write('Cantidad de tweets neutrales: ', neutral_tweet.shape[0]/ df.shape[0] * 100, 5)
+    st.write('Cantidad de tweets negativos: ', negative_tweet.shape[0]/ df.shape[0] * 100, 5)
     
     st.subheader('Gráfica circular (%) que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
     labels = 'Positivo', 'Neutral', 'Negativo'
@@ -146,3 +146,12 @@ def app():
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
     
+    st.subheader('Gráfica de Análisis de Sentimientos Subjetividad - Polaridad')
+    with st.spinner('Cargando grafica de sentimiento'):
+        #grafico de sentimiento y subjetividad con plotly
+        st.subheader('Grafico de sentimiento y subjetividad')
+        fig = px.scatter(df_tweets, x="polarity", y="subjectivity", color="sentiment",
+                            hover_data=['Tweet'])
+        st.write("Eje horizontal - Polaridad: Mientras más cercano a 1, más positivo es el comentario, mientras más cercano a -1, más negativo es el sentimiento.")
+        st.write("Eje vertical - Subjetividad: Mientras más cercano a 1, más relacionado a la opinión es el comentario, mientras más cercano a 0, más relacionado a hechos es el comentario.")
+        st.plotly_chart(fig)    
