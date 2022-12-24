@@ -117,7 +117,7 @@ def app():
 
     st.text('Resultados de la clasificación de sentimientos')
     df["sentiment"] = df["Tweet"].apply(get_sentiment)
-    df['Tweet'].head(25)
+    df = df.join(pd.json_normalize(df['sentiment_results']))
     st.write(df)
     
     st.subheader('Distribución de los sentimientos de tipo positivo, negativo y neutro')
