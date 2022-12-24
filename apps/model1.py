@@ -123,12 +123,7 @@ def app():
     st.subheader('Distribución de los sentimientos de tipo positivo, negativo y neutro')
     df4 = df['sentiment'].value_counts()
     st.write(df4)
-    st.subheader('Gráfica de barras que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
-    # graficar en streamlit
-    st.write('Obtenemos la gráfica de barras en donde el eje x son los nombres usuarios de Twitter y el eje Y es la cantidad o frecuencia de tweets')
-    fig4 = px.bar(df4,height=800)
-    st.plotly_chart(fig4)
-    
+
     positive_tweet = df[df['sentiment'] == 'Positive']
     pos=positive_tweet['Tweet']
     
@@ -146,7 +141,7 @@ def app():
 
     #grafico de sentimiento y subjetividad con plotly
     st.subheader('Grafico de sentimiento y subjetividad')
-    fig = px.scatter(df, x="polarity", y="subjectivity", color="sentiment", hover_data=['Tweet'])
+    fig = px.scatter(df, x="polarity", y="subjectivity", hover_data=['Tweet'])
     st.write("Eje horizontal - Polaridad: Mientras más cercano a 1, más positivo es el comentario, mientras más cercano a -1, más negativo es el sentimiento.")
     st.write("Eje vertical - Subjetividad: Mientras más cercano a 1, más relacionado a la opinión es el comentario, mientras más cercano a 0, más relacionado a hechos es el comentario.")
     st.plotly_chart(fig)    
