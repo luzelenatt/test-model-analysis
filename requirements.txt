@@ -8,6 +8,5 @@ textblob==0.17.1
 wordcloud==1.8.2.2
 nltk==3.8
 scikit-learn
-
-tweepy==3.8.0
+#tweepy==3.8.0
 snscrape==0.4.3.20220106

@@ -1,5 +1,5 @@
 import streamlit as st
-import tweepy
+#import tweepy
 from textblob import TextBlob
 from wordcloud import WordCloud, ImageColorGenerator
 from nltk.tokenize import WordPunctTokenizer
