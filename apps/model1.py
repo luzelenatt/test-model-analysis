@@ -126,11 +126,6 @@ def app():
     df['Tweet'].head(25)
     st.write(df)
     
-    st.subheader('Gráfica de barras en donde el eje x son los nombres usuarios de Twitter y el eje Y es la cantidad o frecuencia de tweets')
-    df3 = df['sentiment'].value_counts()
-    fig3 = px.bar(df3,height=800)
-    st.plotly_chart(fig3)
-    
     st.subheader('Gráfica circular (%) que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
     labels = 'Positivo', 'Neutral', 'Negativo'
     positive = df[df.sentiment == 1].shape[0]
