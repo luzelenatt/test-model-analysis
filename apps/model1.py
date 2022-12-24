@@ -65,8 +65,34 @@ def app():
     fig = px.bar(df1,height=800)
     st.plotly_chart(fig)
     
-    st.subheader('Preprocesamiento de texto')   
-    #hacemos una funcion para limpiar los tweets
+    st.subheader('PREPROCESAMIENTO DE TEXTO')
+
+    @st.cache
+    def tweet_cleaner(text):
+        tok = WordPunctTokenizer()
+        pat1 = r'@[A-Za-z0-9]+'
+        pat2 = r'https?://[A-Za-z0-9./]+'
+        pat3 = r'pic.twitter.com/[A-Za-z0-9./]+'
+        combined_pat = r'|'.join((pat1, pat2, pat3))
+        soup = BeautifulSoup(text, 'lxml')
+        souped = soup.get_text()
+        stripped = re.sub(combined_pat, '', souped)
+        try:
+            clean = stripped.decode("utf-8-sig").replace(u"\ufffd", "?")
+        except:
+            clean = stripped
+        letters_only = re.sub("[^a-zA-Z]", " ", clean)
+        lower_case = letters_only.lower()
+        words = tok.tokenize(lower_case)
+        return (" ".join(words)).strip()
+   
+    st.subheader("Remover caracteres")
+    df['Tweet'] = df['Tweet'].apply(lambda text: tweet_cleaner(text))
+    st.table(df['Tweet'].head(5))
+    st.write(df)
+    
+    
+    #hacemos una funcion para limpiar los tweets   
     def clean_text(text):
         pat1 = r'@[^ ]+'                   #signs
         pat2 = r'https?://[A-Za-z0-9./]+'  #links
@@ -84,60 +110,6 @@ def app():
     
     st.subheader('ANÁLISIS DE SENTIMIENTOS')      
     #crear una funcion para obtener la polaridad y subjetividad
-    def get_sentiment(text):
-        blob = TextBlob(text)
-        sentiment_polarity = blob.sentiment.polarity
-        sentiment_subjectivity = blob.sentiment.subjectivity
-        if sentiment_polarity > 0:
-            sentiment_label = 'Positive'
-        elif sentiment_polarity < 0:
-            sentiment_label = 'Negative'
-        else:
-            sentiment_label = 'Neutral'
-        result = {'polarity':sentiment_polarity,
-                'subjectivity':sentiment_subjectivity,
-                'sentiment':sentiment_label}
-        return result
-    df['sentiment_results'] = df['clean_tweet'].apply(get_sentiment)
-    df = df.join(pd.json_normalize(df['sentiment_results']))
-    #mostrar el nuevo dataframe con las dos nuevas columnas 'Subjectivity' y 'Polarity'
-    st.write('Se añadieron columnas de subjetividad y polaridad') 
-    st.write(df)
+
     
-    st.write('Contabilizando sentimientos positivos, negativos y neutros') 
-    df2=df['sentiment'].value_counts()
-    st.write(df2)
     
-    # graficar en streamlit
-    fig2 = px.bar(df2,height=800)
-    st.plotly_chart(fig2)
-    
-    positive_tweet = df[df['sentiment'] == 'Positive']['clean_tweet']
-    neutral_tweet = df[df['sentiment'] == 'Neutral']['clean_tweet']
-    negative_tweet = df[df['sentiment'] == 'Negative']['clean_tweet']
-    
-    st.write('Visualizamos con mayor detalle los tweets con sentimiento positivo')
-    st.write(positive_tweet)
-    
-    st.write('Visualizamos con mayor detalle los tweets con sentimiento neutro') 
-    st.write(neutral_tweet)
-    
-    st.write('Visualizamos con mayor detalle los tweets con sentimiento negativo')  
-    st.write(negative_tweet)
-    
-    #gráfia circular de los sentimientos
-    ptweet = df[df.sentiment == 'Neutral']
-    pteet = ptweet['clean_tweet']
-    round(ptweet.shape[0] / df.shape[0] * 100, 1)
-    
-    ptweet = df[df.sentiment == 'Negative']
-    pteet = ptweet['clean_tweet']
-    round(ptweet.shape[0] / df.shape[0] * 100, 1)   
-    
-    ptweet = df[df.sentiment == 'Positive']
-    pteet = ptweet['clean_tweet']
-    round(ptweet.shape[0] / df.shape[0] * 100, 1)   
-    
-    st.subheader('Gráfica circular que contabiliza los comentarios positivos, negantivos y negativos')
-    fig = px.pie(df['sentiment'], values='total', names='sentimiento', title='Sentimientos')
-    st.plotly_chart(fig)
