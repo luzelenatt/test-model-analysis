@@ -155,7 +155,7 @@ def app():
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot()
         
-    stopwords = set(stopwords.words('spanish', 'english')) 
+    stopword = set(stopwords.words('spanish', 'english')) 
 
     st.subheader("WordCloud Positivo Tweet")
     asyncio.set_event_loop(asyncio.new_event_loop())
