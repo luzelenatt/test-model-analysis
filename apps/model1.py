@@ -14,7 +14,7 @@ import asyncio
 import sys
 #usar textblob para analizar el sentimiento de cada tweet
 from textblob import TextBlob
-from config import load_tweet
+#from config import load_tweet
 import gensim
 from gensim import matutils, models
 import scipy.sparse
