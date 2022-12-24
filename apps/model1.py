@@ -4,11 +4,15 @@ from sklearn.decomposition import PCA
 import pandas as pd
 import numpy as np
 import re
+from bs4 import BeautifulSoup
 import string
 from wordcloud import WordCloud
 from sklearn.feature_extraction.text import CountVectorizer
 import matplotlib.pyplot as plt
 import seaborn as sns
+import nltk
+from nltk.tokenize import WordPunctTokenizer
+from textblob import TextBlob
 import plotly.express as px
 import asyncio
 import sys
