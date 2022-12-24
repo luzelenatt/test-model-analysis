@@ -54,8 +54,9 @@ def app():
     st.write(df1)
     # graficar en streamlit
     
-    fig = px.bar(df1, x='User', height=400)
-    st.plotly_bar(fig)
+    fig, ax = plt.subplots()
+    ax.hist(df1,height=400)
+    st.pyplot(fig)
     
     def clean_text(text):  
         pat1 = r'@[^ ]+'                   #signs
