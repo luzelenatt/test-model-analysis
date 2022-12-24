@@ -124,12 +124,11 @@ def app():
     df4 = df['sentiment'].value_counts()
     st.write(df4)
     st.subheader('Gráfica de barras que indica la distribución de los sentimientos de tipo positivo, negativo y neutro')
-    df5 = df['sentiment'].value_counts().plot(kind='bar')
-    st.write(df5)
     # graficar en streamlit
     st.write('Obtenemos la gráfica de barras en donde el eje x son los nombres usuarios de Twitter y el eje Y es la cantidad o frecuencia de tweets')
-    fig5 = px.bar(df5,height=800)
-    st.plotly_chart(fig5)
+    fig4 = px.bar(df4,height=800)
+    st.plotly_chart(fig4)
+    
     positive_tweet = df[df['sentiment'] == 'Positive']
     pos=positive_tweet['Tweet']
     
