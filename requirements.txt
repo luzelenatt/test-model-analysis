@@ -1,13 +1,19 @@
 streamlit==1.16.0
 numpy==1.21.5
 pandas==1.4.2
-matplotlib==3.6.2
-#statsmodels==0.12.2
-#textblob==0.17.1
-#wordcloud==1.8.2.2
-nltk==3.8
-scikit-learn
-#tweepy==3.8.0
-snscrape==0.4.3.20220106
+nest-asyncio == 1.5.1
+gensim == 4.3.0
+scipy
+pathlib == 1.0.1
+matplotlib == 3.6.2
+seaborn == 0.11.2
+scikit-learn == 0.24.2
+wordcloud == 1.8.1
 plotly == 5.3.1
+textblob == 0.15.3
+snscrape==0.4.3.20220106
+
+
+
+
 

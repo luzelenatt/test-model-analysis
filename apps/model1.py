@@ -1,10 +1,27 @@
 import streamlit as st
+import twint
+import seaborn as sns
+from sklearn.decomposition import PCA
 import pandas as pd
 import numpy as np
-import plotly.express as px
 import re
+import string
+from wordcloud import WordCloud
+from sklearn.feature_extraction.text import CountVectorizer
 import matplotlib.pyplot as plt
-plt.style.use('fivethirtyeight')
+import seaborn as sns
+import plotly.express as px
+import asyncio
+import sys
+#usar textblob para analizar el sentimiento de cada tweet
+from textblob import TextBlob
+from config import load_tweet
+import gensim
+from gensim import matutils, models
+import scipy.sparse
+from gensim import interfaces, utils, matutils
+sys.path.append('../')
+
 def app():
     st.header('Análisis de sentimientos de tweets sobre Pedro Castillo')
     import snscrape.modules.twitter as sntwitter
