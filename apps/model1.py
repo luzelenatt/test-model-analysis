@@ -67,16 +67,18 @@ def app():
     
     st.subheader('Preprocesamiento de texto')   
     #hacemos una funcion para limpiar los tweets
-    def clean_text_round1(text):
-        '''Poner el texto en minúsculas, elimine el texto entre corchetes, elimine la puntuación y elimine las palabras que contienen números.'''
-        text = text.lower()
-        text = re.sub('\[.*?\]', '', text)
-        text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
-        text = re.sub('\w*\d\w*', '', text)
-        return text
+    def clean_text(text):
+        pat1 = r'@[^ ]+'                   #signs
+        pat2 = r'https?://[A-Za-z0-9./]+'  #links
+        pat3 = r'\'s'                      #floating s's
+        pat4 = r'\#\w+'                     # hashtags
+        pat5 = r'&amp '
+        #pat6 = r'[^A-Za-z\s]'         #remove non-alphabet
+        combined_pat = r'|'.join((pat1, pat2,pat3,pat4,pat5))
+        text = re.sub(combined_pat,"",text).lower()
+        return text.strip()
     # creamos una nueva columna para los tweets limpios
-    round1 = lambda x: clean_text_round1(x)
-    df['clean_tweet'] = df['Tweet'].apply(round1)
+    df['Tweet']=df['Tweet'].apply(clean_text)
     # Ahora aplicaremos la siguiente técnica: Eliminar algunas puntuaciones, textos o palabras que no tengan sentido
     def clean_text_round2(text):
         '''Suprimir algunos signos de puntuación adicionales y texto sin sentido.'''
