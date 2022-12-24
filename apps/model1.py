@@ -97,7 +97,7 @@ def app():
     removing_data = st.text('Eliminando caracteres innecesarios...')
     
     df['Tweet'] = df['Tweet'].apply(lambda text: tweet_cleaner(text))
-    st.table(df['Tweet'].head(25))
+    df['Tweet'].head(25)
     st.write(df)
     
     st.subheader('ANÁLISIS DE SENTIMIENTO')
@@ -141,9 +141,8 @@ def app():
     colors = ['lightskyblue', 'purple', 'pink']
     explode = (0.1, 0, 0)
     # Plot
-    plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
+    fig5 = plt.pie(sizes, explode=explode  , labels=labels, colors=colors,
     autopct='%1.1f%%', startangle=140)
-    plt.axis('equal')
-    st.pyplot()
+    st.pyplot(fig5)
     
     
