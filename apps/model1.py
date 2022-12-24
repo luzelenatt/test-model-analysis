@@ -1,7 +1,7 @@
 import streamlit as st
 #import tweepy
 #from textblob import TextBlob
-from wordcloud import WordCloud, ImageColorGenerator
+#from wordcloud import WordCloud, ImageColorGenerator
 from nltk.tokenize import WordPunctTokenizer
 import pandas as pd
 import numpy as np
