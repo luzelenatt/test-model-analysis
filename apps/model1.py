@@ -166,87 +166,11 @@ def app():
     st.subheader('Nube de palabras de tweets neutros')
     st.image(wordcloud.to_array())
 
+    st.subheader('Grafico de Dispersión: Polaridad y Subjetividad de sentimientos')
     with st.spinner('Cargando grafica de sentimiento'):
         #grafico de sentimiento y subjetividad con plotly
-        st.subheader('Grafico de sentimiento y subjetividad')
         fig = px.scatter(df, x="polarity", y="subjectivity", hover_data=['Tweet'])
-        st.write("Eje horizontal: Mientras más cercano a 1, más positivo es el comentario Mientras más cercano a -1, más negativo es el sentimiento.")
-        st.write("Eje vertical: Mientras más cercano a 1, más subjetivo es el comentario Mientras más cercano a 0, más objetivo es el comentario.")
+        st.write("Eje horizontal Polaridad: -1 <-- Negativa --------- 0 Neutral ------------ Positiva --> 1")
+        st.write("Eje verticalSubjetividad: 1 <-- Hechos --------------------- Opiniones --> 0")
         st.plotly_chart(fig)
-    with st.spinner('Contando comentarios positivos y negativos'):
-        #hacer un grafico circular de los sentimientos positivos y negativos con plotly
-        # si el sentimiento es mayor a 0, es positivo, si es menor a 0 es negativo 
-        #contar los tweets positivos y negativos
-        df['label'] = df['polarity'].apply(lambda x: 'Positivo' if x > 0 else 'Negativo')
-        #crear un dataframe con los sentimientos
-        df_sent = df['label'].value_counts().reset_index()
-        df_sent.columns = ['sentimiento', 'total']
-        #grafico circular
-        st.subheader('Contador de comentarios positivos y negativos')
-        fig = px.pie(df_sent, values='total', names='sentimiento', title='Sentimientos')
-        st.plotly_chart(fig)
-
-    num_temas = st.slider('Numero de temas', 1, 10, 5)
-    with st.spinner('Analizando temas de los tweets'):
-        # crear un diccionario de palabras para el modelo
-        cv = CountVectorizer(stop_words='spanish')
-        data_cv = cv.fit_transform(df.Tweet)
-        data_stop = pd.DataFrame(data_cv.toarray(), columns=cv.get_feature_names())
-        data_stop.index = df.index
-        #crear el modelo de LDA
-        # Convertir una matriz dispersa de conteos en un corpus gensim
-        corpus = matutils.Sparse2Corpus(scipy.sparse.csr_matrix(data_stop.transpose()))
-
-        # Gensim también requiere un diccionario de todos los términos y su ubicación respectiva en la matriz de documentos de términos
-        id2word = dict((v, k) for k, v in cv.vocabulary_.items())
-
-        # Crear modelo lda (equivalente a "fit" en sklearn)
-        lda = models.LdaModel(corpus=corpus, id2word=id2word, num_topics=num_temas, passes=40)
-        #guardar cada topico como la combinacion de las palabras
-        # de cada topico
-        topics = lda.show_topics(formatted=False)
-        # estraee solo la palabra de cada topico
-        topics_words = [(tp[0], [wd[0] for wd in tp[1]]) for tp in topics]
-        topics_words
-        #armar una string con las palabras de cada topico unidad porcomas
-        topics_string = []
-        for topic in topics_words:
-            topics_string.append(' '.join(topic[1]))
-        topics_string
-        #renombrar la columna de los topico
-        topics_string = pd.DataFrame(topics_string, columns=['topic'])
-        topics_string
-        #armar un dataframe con los topico y las palabras
-        df_topics_names= pd.DataFrame(topics_string)
-
-        # Ver los temas en el modelo LDA
-        st.subheader('Temática en los tweets')
-        for i in range(0, df_topics_names.shape[0]):
-            st.write('Tema', i, ':', df_topics_names.iloc[i, 0])
-        # Echemos un vistazo a los temas que contiene cada tweet
-        # y guardarlo en un dataframe
-        corpus_transformed = lda[corpus]
-        topics = [sorted(topics, key=lambda record: -record[1])[0] for topics in corpus_transformed]
-        df_topics = pd.DataFrame(topics, columns=['Topico', 'Importancia'])
-        #grafucar los topico con plotly
-        st.subheader('Gráfico de los topicos de los tweets')
-        fig = px.histogram(df_topics, x="Topico", y="Importancia", color="Topico", height=400)
-        st.plotly_chart(fig)
-        
-    #mostrar que usuario tiene el comentario mas positivo
-    with st.spinner('Calculando el usuario con el comentario mas positivo'):
-        #seleccionar el tweet mas positivo
-        tweet_positivo = df.loc[df['polarity'].idxmax()]
-        #mostrar el tweet mas positivo
-        st.subheader('El tweet más positivo y su usuario')
-        st.write(tweet_positivo['Tweet'])
-        st.write("Usuario 😉: "+tweet_positivo['User'])
-        
-    #mostrar que usuario tiene el comentario mas negativo
-    with st.spinner('Calculando el usuario con el comentario mas negativo'):
-        #seleccionar el tweet mas negativo
-        tweet_negativo = df.loc[df['polarity'].idxmin()]
-        #mostrar el tweet mas negativo
-        st.subheader('El tweet más negativo y su usuario')
-        st.write(tweet_negativo['Tweet'])
-        st.write("Usuario 😔: "+tweet_negativo['User'])
+    
