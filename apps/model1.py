@@ -169,7 +169,7 @@ def app():
     with st.spinner('Cargando grafica de sentimiento'):
         #grafico de sentimiento y subjetividad con plotly
         st.subheader('Grafico de sentimiento y subjetividad')
-        fig = px.scatter(df, x="polarity", y="subjectivity", color="sentiment",hover_data=['Tweet'])
+        fig = px.scatter(df, x="polarity", y="subjectivity", hover_data=['Tweet'])
         st.write("Eje horizontal: Mientras más cercano a 1, más positivo es el comentario Mientras más cercano a -1, más negativo es el sentimiento.")
         st.write("Eje vertical: Mientras más cercano a 1, más subjetivo es el comentario Mientras más cercano a 0, más objetivo es el comentario.")
         st.plotly_chart(fig)
