@@ -144,7 +144,7 @@ def app():
     
     st.subheader('Nube de texto de todos los tweets')
     # Join the different processed titles together.
-    long_string = ','.join(list(df['clean_tweet'].values))
+    long_string = ','.join(list(df['Tweet'].values))
     # Create a WordCloud object
     wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')
     # Generate a word cloud
