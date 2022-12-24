@@ -5,7 +5,7 @@ import streamlit as st
 #from nltk.tokenize import WordPunctTokenizer
 import pandas as pd
 import numpy as np
-import plotly.express as px
+#import plotly.express as px
 import re
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
