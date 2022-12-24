@@ -16,8 +16,6 @@ from textblob import TextBlob
 import plotly.express as px
 import asyncio
 import sys
-#usar textblob para analizar el sentimiento de cada tweet
-from textblob import TextBlob
 #from config import load_tweet
 import gensim
 from gensim import matutils, models
@@ -142,6 +140,30 @@ def app():
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
     
+    st.subheader('Nube de texto de todos los tweets')
+    # Join the different processed titles together.
+    long_string = ','.join(list(df['Tweet'].values))
+    # Create a WordCloud object
+    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')
+    # Generate a word cloud
+    wordcloud.generate(long_string)
+    # Visualize the word cloud in streamlit
+    st.image(wordcloud.to_array())
+    
+    #hacer una nube de palabras con los tweets negativos
+    #seleccionar los tweets negativos
+    df_neg = df[df['sentiment'] < 0]
+    # Join the different processed titles together.
+    long_string = ','.join(list(df_neg['Tweet'].values))
+    # Create a WordCloud object
+    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')
+    # Generate a word cloud
+    wordcloud.generate(long_string)
+    # Visualize the word cloud in streamlit
+    st.subheader('Nube de palabras de tweets negativos')
+    st.image(wordcloud.to_array())
+    
+        
     #mostrar un grafico de barras con las palabras mas comunes
     #modo oscuro
     sns.set_style('darkgrid')
@@ -153,14 +175,3 @@ def app():
     st.subheader('Palabras más comunes')
     fig = px.bar(data_words, x='word', y='count', color='count', height=1000)
     st.plotly_chart(fig)
-
-    st.subheader('Nube de texto de todos los tweets')
-    # Join the different processed titles together.
-    long_string = ','.join(list(df['Tweet'].values))
-    # Create a WordCloud object
-    wordcloud = WordCloud(background_color="white", max_words=5000, contour_width=3, contour_color='steelblue')
-    # Generate a word cloud
-    wordcloud.generate(long_string)
-    # Visualize the word cloud in streamlit
-    st.image(wordcloud.to_array())
-
