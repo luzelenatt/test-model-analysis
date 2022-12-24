@@ -100,7 +100,7 @@ def app():
     
     st.subheader('ANÁLISIS DE SENTIMIENTO')
     #crear una funcion para calcular el sentimiento
-    def detect_sentiment(text):
+    def detect_polarity(text):
         return TextBlob(text).sentiment.polarity
 
     #crear una funcion para calcular la subjetividad
@@ -230,7 +230,7 @@ def app():
         #mostrar el tweet mas positivo
         st.subheader('El tweet más positivo y su usuario')
         st.write(tweet_positivo['Tweet'])
-        st.write("Usuario 😂😉: "+tweet_positivo['User'])
+        st.write("Usuario 😉: "+tweet_positivo['User'])
         
     #mostrar que usuario tiene el comentario mas negativo
     with st.spinner('Calculando el usuario con el comentario mas negativo'):
@@ -239,4 +239,4 @@ def app():
         #mostrar el tweet mas negativo
         st.subheader('El tweet más negativo y su usuario')
         st.write(tweet_negativo['Tweet'])
-        st.write("Usuario 😢😔: "+tweet_negativo['User'])
+        st.write("Usuario 😔: "+tweet_negativo['User'])
