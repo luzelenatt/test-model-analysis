@@ -78,9 +78,9 @@ def app():
         pat1 = r'@[A-Za-z0-9]+'
         pat2 = r'https?://[A-Za-z0-9./]+'
         pat3 = r'pic.twitter.com/[A-Za-z0-9./]+'
-        pat4 = r'\'s' 
-        pat5 = r'\#\w+'
-        combined_pat = r'|'.join((pat1, pat2, pat3, pat4, pat5))
+        #pat4 = r'\'s' 
+        #pat5 = r'\#\w+'
+        combined_pat = r'|'.join((pat1, pat2, pat3))
         soup = BeautifulSoup(text, 'lxml')
         souped = soup.get_text()
         stripped = re.sub(combined_pat, '', souped)
@@ -142,6 +142,18 @@ def app():
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot()
     
+    #mostrar un grafico de barras con las palabras mas comunes
+    #modo oscuro
+    sns.set_style('darkgrid')
+    # Crear un dataframe de las palabras más comunes
+    data_words = pd.DataFrame(wordcloud.words_.items(), columns=['word', 'count'])
+    #seleccionar las 10 palabras mas comunes
+    data_words = data_words.iloc[:20, :]
+    # Visualizar los palabras más comunes con plotly.express
+    st.subheader('Palabras más comunes')
+    fig = px.bar(data_words, x='word', y='count', color='count', height=1000)
+    st.plotly_chart(fig)
+
     st.subheader('Nube de texto de todos los tweets')
     # Join the different processed titles together.
     long_string = ','.join(list(df['Tweet'].values))
@@ -152,14 +164,3 @@ def app():
     # Visualize the word cloud in streamlit
     st.image(wordcloud.to_array())
 
-    #mostrar un grafico de barras con las palabras mas comunes
-    #modo oscuro
-    sns.set_style('darkgrid')
-    # Crear un dataframe de las palabras más comunes
-    data_words = pd.DataFrame(wordcloud.words_.items(), columns=['word', 'count'])
-    #seleccionar las 10 palabras mas comunes
-    data_words = data_words.iloc[:10, :]
-    # Visualizar los palabras más comunes con plotly.express
-    st.subheader('Palabras más comunes')
-    fig = px.bar(data_words, x='word', y='count', color='count', height=800)
-    st.plotly_chart(fig)
