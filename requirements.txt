@@ -14,6 +14,7 @@ textblob == 0.15.3
 snscrape==0.4.3.20220106
 nltk==3.4.5
 beautifulsoup4==4.8.1
+neattext==0.1.3
 
 
 

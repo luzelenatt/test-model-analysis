@@ -84,6 +84,30 @@ def app():
     #limpiar tweets
     df['Tweet']=df['Tweet'].apply(clean_text)
     st.write(df)
+        # Cleaning Text : remove_userhandles
+    import neattext.functions as nfx
+    df['clean_tweet'] = df['clean_tweet'].apply(lambda x: nfx.remove_userhandles(x))
+    # Cleaning Text: Multiple WhiteSpaces
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_multiple_spaces)
+    # Cleaning Text : remove_urls
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_urls)
+    # Cleaning Text: remove_punctuations
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_punctuations)
+    # Cleaning Text: remove_special_characters
+    #df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_special_characters)
+    # Cleaning Text: remove_shortwords
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_shortwords)
+    # Cleaning Text: remove_emojis
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_emojis)
+    # Cleaning Text: remove_punctuations
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_punctuations)
+    # Cleaning Text: remove_punctuations
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_terms_in_bracket)
+    # Cleaning Text: remove_shortwords
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_shortwords)
+    # Cleaning Text: remove_stopwords
+    df['clean_tweet'] = df['clean_tweet'].apply(nfx.remove_stopwords)
+    
     
     st.subheader('ANÁLISIS DE SENTIMIENTO')
     #crear una funcion para calcular el sentimiento
